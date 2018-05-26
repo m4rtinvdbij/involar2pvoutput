@@ -1,7 +1,7 @@
 
 # involar2pvoutput
 
-This is a Nodejs server for sending the output to PVoutput.org
+This is a Nodejs server for sending the output to PVoutput.org, the original Sedas website went offline. The replacement application is crap. So i decided to start this project and release it for other Egate users.
 
 ## Getting Started
 
