@@ -3,22 +3,7 @@ var fs = require('fs');
 const moment = require('moment');
 let m = moment();
 var request = require('request');
-
-/////////////////////////////////////////
-// settings
-
-var LocalLogging = true;
-var LocalIP = '';
-
-var PvOutputKey = ''; // api key
-var PvOutputSid = ''; // your system id of the whole collection solar panels
-var PvOutputMicroInverterMode = true; // optional, post individual inverter stats to PVoutput
-var PvOutpputMicroInverterMapping = {
-	'':''
-};
-
-var InvolarRelay = false; // does not work at the moment, pleae do not use
-var InvolarServer = '62.28.182.144';
+var config = require('./config');
 
 /////////////////////////////////////////
 // you dont want to change this
@@ -40,31 +25,16 @@ var server = net.createServer(function(socket) {
 		console.log('Server '+ serverprop.port +': incoming data');
 		//textChunk = data.toString('utf8');
 
-		if(InvolarRelay) {
+		if(config.Involar.Relay) {
 
 			var client = new net.Socket();
-			client.connect(1020, InvolarServer, function() {
-				console.log('Involar: Connected to server');
-				client.write(data);
-				console.log('Involar: data sent');
-				//client.destroy();
-				//console.log('Involar: Connection closed');
-			});
-
-			client.on('data', function(data) {
-				console.log('Involar: Received: ' + data);
-
-				if(LocalLogging) {
-
-		  			fs.appendFile('involarresponse.txt', new Date().toLocaleString('en-US', { timeZone: 'Europe/Amsterdam'}) +"	"+data.toString('hex') + ' / ' + data +"\r\n", function (err) {
-		    			if (err) 
-		        			return console.log(err);
-					});
-
+			client.connect(1020, config.Involar.Server, function() {
+				if(client) {
+					console.log('Involar: Connected to server');
+					client.write(data);
+					client.destroy();
+					console.log('Involar: data sent');
 				}
-
-				//socket.write(data);
-				//client.destroy(); // kill client after server's response
 			});
 
 			client.on('close', function() {
@@ -96,15 +66,19 @@ var server = net.createServer(function(socket) {
 					console.log(serial +':'+ inttoday);
 					if(serial>0 && inttoday) {
 
-						var sid = PvOutpputMicroInverterMapping[serial];
+						var sid = config.PvOutput.MicroInverterMapping[serial];
 
 						if(sid) {
 
-							request('https://pvoutput.org/service/r2/addstatus.jsp?sid='+ sid +'&key='+ PvOutputKey +'&v1='+ inttoday 
-							+'&t='+ moment().format('HH:mm')
-							+'&d='+ moment().format('YYYYMMDD'), function (error, response, body) {
-							  console.log('Micro inverter PV Output for serial ('+ serial +')', body); 
-							});
+							if(config.PvOutput.MicroInverterMode) {
+
+								request('https://pvoutput.org/service/r2/addstatus.jsp?sid='+ sid +'&key='+ config.PvOutput.Key +'&v1='+ inttoday 
+								+'&t='+ moment().format('HH:mm')
+								+'&d='+ moment().format('YYYYMMDD'), function (error, response, body) {
+								  console.log('Micro inverter PV Output for serial ('+ serial +')', body); 
+								});
+
+							} 
 
 						} else {
 
@@ -171,8 +145,8 @@ var server = net.createServer(function(socket) {
 				}
 				console.log(NewWh);
 
-				request('https://pvoutput.org/service/r2/addstatus.jsp?sid='+ PvOutputSid 
-				+'&key='+ PvOutputKey 
+				request('https://pvoutput.org/service/r2/addstatus.jsp?sid='+ config.PvOutput.Sid 
+				+'&key='+ config.PvOutput.Key 
 				+'&v2='+ NewWh 
 				+'&t='+ moment().format('HH:mm')
 				+'&d='+ moment().format('YYYYMMDD'), function (error, response, body) {
@@ -213,7 +187,8 @@ var server = net.createServer(function(socket) {
 LocalPorts.forEach(function(item, index, array) {
 
 	console.log('Starting server on port '+ item);
-	server.listen(item, LocalIP);
+
+	server.listen(item, config.local.ip);
 
 });
 
