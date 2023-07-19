@@ -38,7 +38,8 @@ Here's an example of how to get this working when your router doesn't support ch
 4. Using powershell or similar, connect (via SSH) to your Raspberry PI. The credentials are set during installation. The command is something like `ssh your-username@your-raspberry-IP`
 5. Install [PIHOLE](https://pi-hole.net/), which is actually a network-wide ad-blocker but that can also acts as DNS.
 6. Configure pihole to redirect `involar.net`, `involar.com`, `data.involar.net` and `data.involar.com` (the exact address varies depending on hardware) to your local IP. This is done under the section 'DNS Records'.
-7. Involar2pvoutput is created using node, so we need that installed on the raspberry pi using the command ´sudo apt install nodejs´. This also comes with NPM, which is used to install some dependencies for involar2pvoutput (listed above).
-8. Install involar2pvoutput using the clone command `git clone https://github.com/m4rtinvdbij/involar2pvoutput.git`
-9. Open the configuration file using an editor, e.g. nano: `nano involar2pvoutput/config.js` and input your pvoutput.org API key and system id, which are found on pvoutput.org under settings. You can configure as you like here.
-10. Run the server as a background task, putting the output into 'nohup.out': `nohup sudo node involar2pvoutput/server.js &`. You can view the output later by doing `nano nohup.out`.
+7. Configure your router so that it uses your new servers IP as a DNS server.
+8. Involar2pvoutput is created using node, so we need that installed on the raspberry pi using the command ´sudo apt install nodejs´. This also comes with NPM, which is used to install some dependencies for involar2pvoutput (listed above).
+9. Install involar2pvoutput using the clone command `git clone https://github.com/m4rtinvdbij/involar2pvoutput.git`
+10. Open the configuration file using an editor, e.g. nano: `nano involar2pvoutput/config.js` and input your pvoutput.org API key and system id, which are found on pvoutput.org under settings. You can configure as you like here.
+11. Run the server as a background task, putting the output into 'nohup.out': `nohup sudo node involar2pvoutput/server.js &`. You can view the output later by doing `nano nohup.out`.
