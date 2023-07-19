@@ -39,6 +39,6 @@ Here's an example of how to get this working when your router doesn't support ch
 5. Install [PIHOLE](https://pi-hole.net/), which is actually a network-wide ad-blocker but that can also acts as DNS.
 6. Configure pihole to redirect `involar.net`, `involar.com`, `data.involar.net` and `data.involar.com` (the exact address varies depending on hardware) to your local IP. This is done under the section 'DNS Records'.
 7. Involar2pvoutput is created using node, so we need that installed on the raspberry pi using the command ´sudo apt install nodejs´. This also comes with NPM, which is used to install some dependencies for involar2pvoutput (listed above).
-8. Install involar2pvoutput using the clone command ´git clone https://github.com/m4rtinvdbij/involar2pvoutput.git´
-9: Open the configuration file using an editor, e.g. nano: `nano involar2pvoutput/config.js' and input your pvoutput.org API key and system id, which are found on pvoutput.org under settings. You can configure as you like here.
-9. Run the server as a background task, putting the output into 'nohup.out': `nohup sudo node involar2pvoutput/server.js &`. You can view the output later by doing `nano nohup.out`.
+8. Install involar2pvoutput using the clone command `git clone https://github.com/m4rtinvdbij/involar2pvoutput.git`
+9. Open the configuration file using an editor, e.g. nano: `nano involar2pvoutput/config.js` and input your pvoutput.org API key and system id, which are found on pvoutput.org under settings. You can configure as you like here.
+10. Run the server as a background task, putting the output into 'nohup.out': `nohup sudo node involar2pvoutput/server.js &`. You can view the output later by doing `nano nohup.out`.
