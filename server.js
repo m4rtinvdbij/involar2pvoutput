@@ -181,6 +181,10 @@ var server = net.createServer(function(socket) {
 		console.log('Server '+ serverprop.port +': Connection closed with Egate');
 	});
 
+	socket.on('error', function(err){
+		console.log('ERROR: ' + err);
+	});
+
 
 });
 
